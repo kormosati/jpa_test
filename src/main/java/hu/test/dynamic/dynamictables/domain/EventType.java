@@ -1,7 +1,7 @@
 package hu.test.dynamic.dynamictables.domain;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.Tolerate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,5 +18,8 @@ public class EventType {
     private Long id;
     private String name;
     private String description;
+
+    @Tolerate
+    public EventType() {}
 
 }

@@ -1,17 +1,20 @@
 package hu.test.dynamic.dynamictables;
 
-import hu.test.dynamic.dynamictables.domain2.Event;
 import hu.test.dynamic.dynamictables.domain.EventType;
+import hu.test.dynamic.dynamictables.domain2.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.io.Serializable;
-import java.util.Optional;
 
 @Service
+
+//@org.springframework.transaction.annotation.Transactional
 public class EventTypeService {
 
 //    @Autowired
@@ -20,6 +23,9 @@ public class EventTypeService {
 
     @Autowired
     EntityManagerFactoryUtil entityManagerFactoryUtil;
+
+    @Autowired
+    JpaTransactionManager jpaTransactionManager;
 
     private EntityManager em;
 
@@ -42,26 +48,32 @@ public class EventTypeService {
         em.close();
     }
 
+//    @Transactional(value = "jpaTransactionManager")
     public void saveEvent(Event event) {
 
-//        entityManagerFactoryUtil.setEntityManagerFactory(Optional.of("hu.test.dynamic.dynamictables.domain2"));
-//        EntityManager em = creaEntityManager();
-//
-//        em.getTransaction().begin();
-//        em.persist(event);
-//        em.getTransaction().commit();
-//
-//        em.close();
-
-        entityManagerFactoryUtil.setEntityManagerFactory(Optional.of("hu.test.dynamic.dynamictables.domain"));
+//        entityManagerFactoryUtil.setEntityManagerFactory(Optional.of("hu.test.dynamic.dynamictables.domain"));
         em = creaEntityManager();
+//        em.getDelegate().
 
         EventType build = EventType.builder().name("myname").description("mydesc").build();
-        JpaRepository<EventType, Serializable> repository = createJpaRepository(em);
+        JpaRepository<EventType, String> repository = new SimpleJpaRepository<EventType, String>(EventType.class, em);
 //        em.getTransaction().begin();
-//        em.persist();
-//        em.getTransaction().commit();
+
+//        em.persist(build);
+
         repository.save(build);
+//        em.getTransaction().commit();
+
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//
+//        CriteriaQuery<EventType> q = cb.createQuery(EventType.class);
+//        Root<EventType> c = q.from(EventType.class);
+//        q.select(c);
+//
+//        TypedQuery<EventType> query = em.createQuery(q);
+//        List<EventType> results = query.getResultList();
+
+
         em.close();
 
     }

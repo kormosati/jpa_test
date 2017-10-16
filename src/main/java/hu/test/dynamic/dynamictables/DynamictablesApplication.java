@@ -4,8 +4,15 @@ import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
@@ -20,7 +27,12 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 
 @SpringBootApplication
+@ComponentScan
 //@EnableJpaRepositories(basePackages = "hu.test.dynamic")
+@EnableAutoConfiguration(exclude = {
+        DataSourceAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class,
+        HibernateJpaAutoConfiguration.class})
 public class DynamictablesApplication {
 
 	public static void main(String[] args) {
@@ -39,19 +51,19 @@ public class DynamictablesApplication {
 //		return bean.getObject();
 //	}
 
-	@Bean
-	public JpaVendorAdapter jpaVendorAdapter() {
-		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-		hibernateJpaVendorAdapter.setShowSql(false);
-		hibernateJpaVendorAdapter.setGenerateDdl(true);
-		hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
-		return hibernateJpaVendorAdapter;
-	}
-
-	@Bean
-	public DataSource dataSource() {
-		DriverManagerDataSource ds = new DriverManagerDataSource("jdbc:mysql://localhost:3306/test", "root", "root");
-		ds.setDriverClassName("com.mysql.jdbc.Driver");
-		return ds;
-	}
+//	@Bean
+//	public JpaVendorAdapter jpaVendorAdapter() {
+//		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+//		hibernateJpaVendorAdapter.setShowSql(false);
+//		hibernateJpaVendorAdapter.setGenerateDdl(true);
+//		hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
+//		return hibernateJpaVendorAdapter;
+//	}
+//
+//	@Bean
+//	public DataSource dataSource() {
+//		DriverManagerDataSource ds = new DriverManagerDataSource("jdbc:mysql://localhost:3306/test", "root", "root");
+//		ds.setDriverClassName("com.mysql.jdbc.Driver");
+//		return ds;
+//	}
 }
